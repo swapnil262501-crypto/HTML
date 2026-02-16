@@ -1,0 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  background: linear-gradient(#9ee7ff, #c7f6ff);
+  overflow: hidden;
+}
+canvas {
+  display: block;
+  margin: auto;
+  background: url('https://i.imgur.com/NY0RmSf.png') center/cover no-repeat;
+  width: 100vw;
+  height: 100vh;
+}

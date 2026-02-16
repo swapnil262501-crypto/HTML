@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soar Collection - Premium Streetwear</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ffffff; color: #333; line-height: 1.6; }
+        
+        /* Header */
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1rem 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+        nav { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; }
+        .logo-placeholder { width: 150px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; backdrop-filter: blur(10px); }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 500; transition: all 0.3s; position: relative; }
+        .nav-links a:hover { color: #ffd700; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background: #ffd700; transition: width 0.3s; }
+        .nav-links a:hover::after { width: 100%; }
+        .cart-icon { position: relative; font-size: 1.5rem; cursor: pointer; }
+        .cart-count { position: absolute; top: -8px; right: -8px; background: #ff4757; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; }
+        
+        /* Hero Section */
+        .hero { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; color: white; margin-top: 80px; }
+        .hero-content h1 { font-size: 4rem; margin-bottom: 1rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .hero-content p { font-size: 1.5rem; margin-bottom: 2rem; }
+        .cta-btn { background: white; color: #667eea; padding: 1rem 3rem; font-size: 1.2rem; border: none; border-radius: 50px; cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block; font-weight: bold; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .cta-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        
+        /* Sections */
+        .container { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+        section { margin-bottom: 5rem; }
+        .section-title { text-align: center; font-size: 3rem; margin-bottom: 3rem; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        
+        /* Product Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); transition: all 0.3s; border: 1px solid #f0f0f0; }
+        .product-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+        .product-image { height: 250px; background: linear-gradient(45deg, #f0f2f5, #e0e6ed); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #ccc; }
+        .product-info { padding: 1.5rem; }
+        .product-title { font-size: 1.3rem; font-weight: bold; margin-bottom: 0.5rem; color: #333; }
+        .product-price { font-size: 1.5rem; font-weight: bold; color: #667eea; margin-bottom: 1rem; }
+        .size-selector { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .size-btn { padding: 0.5rem 1rem; border: 2px solid #e0e0e0; background: white; border-radius: 25px; cursor: pointer; transition: all 0.3s; font-size: 0.9rem; }
+        .size-btn.active, .size-btn:hover { background: #667eea; color: white; border-color: #667eea; }
+        .add-to-cart { width: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 1rem; border-radius: 10px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+        .add-to-cart:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4); }
+        
+        /* Cart Modal */
+        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; }
+        .cart-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 2rem; border-radius: 20px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .cart-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #eee; }
+        .cart-item img { width: 60px; height: 60px; border-radius: 10px; background: #f0f0f0; }
+        .cart-item-info { flex: 1; }
+        .remove-item { background: #ff4757; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 50%; cursor: pointer; font-size: 0.9rem; }
+        .checkout-btn { width: 100%; background: linear-gradient(135deg, #00b894 0%, #00cec9 100%); color: white; border: none; padding: 1.5rem; border-radius: 15px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 1rem; transition: all 0.3s; }
+        .checkout-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 184, 148, 0.4); }
+        
+        /* Footer */
+        footer { background: #2c3e50; color: white; text-align: center; padding: 3rem 2rem 2rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .footer-section h3 { color: #ffd700; margin-bottom: 1rem; }
+        .social-links { display: flex; gap: 1rem; justify-content: center; margin-top: 1rem; }
+        .social-links a { color: white; font-size: 1.5rem; transition: all 0.3s; }
+        .social-links a:hover { color: #ffd700; transform: translateY(-3px); }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .product-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .product-card { animation: fadeInUp 0.6s ease forwards; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo-placeholder">SOAR LOGO</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#tshirts">T-Shirts</a></li>
+                <li><a href="#shirts">Shirts</a></li>
+                <li><a href="#hoodies">Hoodies</a></li>
+                <li><a href="#lowers">Lowers</a></li>
+                <li><a href="#shoes">Shoes</a></li>
+                <li><a href="#accessories">Accessories</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>SOAR COLLECTION</h1>
+            <p>Premium Streetwear Delivered Across India</p>
+            <a href="#tshirts" class="cta-btn">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Products Sections -->
+    <div class="container">
+        <section id="tshirts">
+            <h2 class="section-title">T-Shirts</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-tshirt"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Classic Crew T-Shirt</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="S">S</button>
+                            <button class="size-btn" data-size="M">M</button>
+                            <button class="size-btn" data-size="L">L</button>
+                            <button class="size-btn" data-size="XL">XL</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Classic Crew T-Shirt', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+                <!-- Add more product cards here -->
+            </div>
+        </section>
+
+        <section id="shirts">
+            <h2 class="section-title">Shirts</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-shirt"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Oversized Button Shirt</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="S">S</button>
+                            <button class="size-btn" data-size="M">M</button>
+                            <button class="size-btn" data-size="L">L</button>
+                            <button class="size-btn" data-size="XL">XL</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Oversized Button Shirt', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hoodies">
+            <h2 class="section-title">Hoodies</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-hoodie"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Graphic Hoodie</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="S">S</button>
+                            <button class="size-btn" data-size="M">M</button>
+                            <button class="size-btn" data-size="L">L</button>
+                            <button class="size-btn" data-size="XL">XL</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Graphic Hoodie', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="lowers">
+            <h2 class="section-title">Lowers</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-pants"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Cargo Pants</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="28">28</button>
+                            <button class="size-btn" data-size="30">30</button>
+                            <button class="size-btn" data-size="32">32</button>
+                            <button class="size-btn" data-size="34">34</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Cargo Pants', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="shoes">
+            <h2 class="section-title">Shoes</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-shoe-prints"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Street Sneakers</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="7">7</button>
+                            <button class="size-btn" data-size="8">8</button>
+                            <button class="size-btn" data-size="9">9</button>
+                            <button class="size-btn" data-size="10">10</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Street Sneakers', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="accessories">
+            <h2 class="section-title">Accessories</h2>
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-image"><i class="fas fa-gem"></i></div>
+                    <div class="product-info">
+                        <div class="product-title">Chain Necklace</div>
+                        <div class="product-price">₹3000</div>
+                        <div class="size-selector">
+                            <button class="size-btn" data-size="One Size">One Size</button>
+                        </div>
+                        <button class="add-to-cart" onclick="addToCart('Chain Necklace', 3000, this)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+            <div id="cartItems"></div>
+            <div id="cartTotal" style="font-size: 1.5rem; font-weight: bold; margin: 1rem 0; text-align: right;"></div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            <button onclick="toggleCart()" style="width: 100%; background: #ddd; color: #333; border: none; padding: 1rem; border-radius: 10px; margin-top: 0.5rem; cursor: pointer;">Close</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Soar Collection</h3>
+                <p>Premium streetwear delivered across all India. Quality you can feel, style you can wear.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <p><a href="#" style="color: #ccc; text-decoration: none;">T-Shirts</a> | <a href="#" style="color: #ccc; text-decoration: none;">Hoodies</a></p>
+                <p><a href="#" style="color: #ccc; text-decoration: none;">Shipping</a> | <a href="#" style="color: #ccc; text-decoration: none;">Returns</a></p>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>info@soarcollection.com<br>+91 98765 43210</p>
+            </div>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p style="margin-top: 2rem; opacity: 0.8;">© 2025 Soar Collection. All rights reserved. PAN India Delivery.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        let cartCount = 0;
+
+        // Size selection
+        document.querySelectorAll('.size-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function addToCart(name, price, button) {
+            const sizeContainer = button.parentElement.querySelector('.size-selector');
+            const selectedSize = sizeContainer.querySelector('.size-btn.active');
+            
+            if (!selectedSize) {
+                alert('Please select a size first!');
+                return;
+            }
+
+            const item = {
+                id: Date.now(),
+                name: name,
+                price: price,
+                size: selectedSize.dataset.size,
+                quantity: 1
+            };
+
+            cart.push(item);
+            cartCount++;
+            updateCartUI();
+            alert('Added to cart!');
+        }
+
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+            if (modal.style.display === 'block') updateCartDisplay();
+        }
+
+        function updateCartDisplay() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+                cartTotal.innerHTML = '';
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ccc;">
+                        ${getIconForProduct(item.name)}
+                    </div>
+                    <div class="cart-item-info">
+                        <div>${item.name}</div>
+                        <div>Size: ${item.size} | ₹${item.price}</div>
+                    </div>
+                    <button class="remove-item" onclick="removeFromCart(${item.id})">×</button>
+                </div>
+            `).join('');
+
+            total = cart.reduce((sum, item) => sum + item.price, 0);
+            cartTotal.innerHTML = `Total: ₹${total}`;
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
+            cartCount = cart.length;
+            updateCartUI();
+            updateCartDisplay();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            alert('Redirecting to payment gateway... (Demo)');
+            // Here you would integrate with Razorpay, Paytm, etc.
+            cart = [];
+            cartCount = 0;
+            updateCartUI();
+            toggleCart();
+        }
+
+        function getIconForProduct(name) {
+            const icons = {
+                'T-Shirt': '👕', 'Shirt': '👔', 'Hoodie': '🧥',
+                'Pants': '👖', 'Sneakers': '👟', 'Necklace': '💍'
+            };
+            return icons[name.split(' ')[0]] || '🛍️';
+        }
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Close cart when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
